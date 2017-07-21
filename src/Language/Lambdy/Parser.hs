@@ -13,6 +13,7 @@ data Lambda
 	= Value Value
 	| Lambda Var Lambda
 	| Apply Lambda Lambda
+	| Operator Op Lambda Lambda
 	| Var Var
 	deriving Show
 
@@ -23,6 +24,10 @@ data Value
 
 data Var
 	= Name String
+	deriving Show
+
+data Op
+	= Op String
 	deriving Show
 
 parseLambda :: String -> Either String [Definition]
@@ -41,6 +46,8 @@ def :: Definition
 lambda :: Lambda
 	= '(' f:lambda ' '* x:lambda ')'
 					{ Apply f x }
+	/ '(' x:lambda ' '* o:op ' '* y:lambda ')'
+					{ Operator o x y }
 	/ v:value			{ Value v }
 	/ v:var				{ Var v }
 	/ '\\' v:var ' '* '-' '>' ' '* l:lambda
@@ -52,5 +59,8 @@ value :: Value
 
 var :: Var
 	= cs:<isAlpha>+			{ Name cs }
+
+op :: Op
+	= o:<isSymbol>+			{ Op o }
 
 |]

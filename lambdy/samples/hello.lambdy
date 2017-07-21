@@ -1,1 +1,1 @@
-main = (putStrLn "lambdy")
+main = (putStrLn =<< getLine)
