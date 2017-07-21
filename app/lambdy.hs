@@ -1,7 +1,9 @@
 module Main where
 
+import System.Environment
 import Language.Lambdy.Parser
 
 main :: IO ()
 main = do
-	print $ parseLambda "main = (putStrLn \"lambdy\")\n"
+	fp : _ <- getArgs
+	print . parseLambda =<< readFile fp
